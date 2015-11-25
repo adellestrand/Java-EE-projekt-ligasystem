@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition template="template.xhtml"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{adminBean.check}" />
+    </f:metadata>
+    
+        
+    <ui:define name="windowTitle">
+        Admin
+    </ui:define>
+    <ui:define name="headingText">
+        Ändraresultatet för matcherna
+        <h:form class="pure-form pure-form-stacked" style="text-align: right">
+            <h:commandLink action="#{adminBean.logout()}" value="Admin" />  
+        </h:form>
+    </ui:define>
+    <ui:define name="content">
+        <h:form class="pure-form pure-form-stacked">
+            <h:selectOneMenu value="Season" onchange="submit()" 
+                             valueChangeListener="#{adminBean.seasonChanged}">
+                <f:selectItem itemLabel="Season" itemValue="0"/>
+                <f:selectItems value="#{adminBean.season}" var="s"
+                               itemLabel="#{s.seasonName}" itemValue="#{s.seasonID}"/>
+            </h:selectOneMenu>
+        </h:form>
+        <br></br>
+        <h:form class="pure-form pure-form-stacked">
+            <h:selectOneMenu value="div" onchange="submit()" 
+                             valueChangeListener="#{adminBean.divChanged}">
+                <f:selectItem itemLabel="Division" itemValue="0"/>
+                <f:selectItems value="#{adminBean.division}" var="d"
+                               itemLabel="#{d.namn}" itemValue="#{d.id}"/>
+            </h:selectOneMenu>
+        </h:form>
+        <br></br>
+        <h:form id="formtabell" class="pure-form pure-form-stacked">
+
+            <h:dataTable id="minTabell" value="#{adminBean.matcher}" var="match" 
+                         class="pure-table"
+                         style="width: 100%"
+                         rowClasses="pure-table-odd,pure-table">
+                <h:column>
+                    <f:facet name="header">Dag</f:facet>
+                    <h:outputText value="#{match.dag}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Hemma lag</f:facet>
+                    <h:outputText value="#{match.hlag}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">H</f:facet>
+                    <h:inputText value="#{match.scoreHome}" rendered="#{match.editable}" required="true">
+                        <f:convertNumber integerOnly="true"/>
+                    </h:inputText>
+                    <h:outputText value="#{match.scoreHome}" rendered="#{not match.editable}"></h:outputText>
+                </h:column>
+               <h:column>
+                    <f:facet name="header">B</f:facet>
+                    <h:inputText value="#{match.scoreAway}" rendered="#{match.editable}" required="true">
+                        <f:convertNumber integerOnly="true"/>
+                    </h:inputText>
+                    <h:outputText value="#{match.scoreAway}" rendered="#{not match.editable}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Borta lag</f:facet>
+                    <h:outputText value="#{match.blag}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Editera</f:facet>
+                    <h:commandLink id="editera" value="Editera" action="#{adminBean.setEditable(match)}" class="button-secondary pure-button">
+                        <f:ajax render="@form" execute="@form"/>
+                    </h:commandLink>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Updatera</f:facet>
+                    <h:commandButton value="Submit" type="submit" action="#{adminBean.saveAction(adminBean.array)}" class="button-success pure-button">
+                        <f:ajax render="@form" execute="@form"/>
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

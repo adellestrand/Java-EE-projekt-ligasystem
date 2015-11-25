@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition template="template.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+    <ui:define name="windowTitle">
+        Tabell
+    </ui:define>
+    <ui:define name="headingText">
+        Visa tabellen för en viss Division och Säsong
+    </ui:define>
+    <ui:define name="content">
+        <h:form class="pure-form pure-form-stacked">
+            <h:selectOneMenu value="Season" onchange="submit()" 
+                             valueChangeListener="#{controllerBean.seasonChanged}">
+                <f:selectItem itemLabel="Season" itemValue="0"/>
+                <f:selectItems value="#{controllerBean.season}" var="s"
+                               itemLabel="#{s.seasonName}" itemValue="#{s.seasonID}"/>
+            </h:selectOneMenu>
+        </h:form>
+        <br></br>
+        <h:form class="pure-form pure-form-stacked">
+            <h:selectOneMenu value="div" onchange="submit()" 
+                             valueChangeListener="#{controllerBean.divChanged}">
+                <f:selectItem itemLabel="Division" itemValue="0"/>
+                <f:selectItems value="#{controllerBean.division}" var="d"
+                               itemLabel="#{d.namn}" itemValue="#{d.id}"/>
+            </h:selectOneMenu>
+        </h:form>
+        <br></br>
+        <h:form id="formtabell" class="pure-form pure-form-stacked">
+
+            <h:dataTable id="minTabell" value="#{controllerBean.tabell}" var="tabell" 
+                         class="pure-table"
+                         style="width: 100%"
+                         rowClasses="pure-table-odd,pure-table">
+                <h:column>
+                    <f:facet name="header">Lag</f:facet>
+                    <h:outputText value="#{tabell.lagNamn}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Matcher</f:facet>
+                    <h:outputText value="#{tabell.matcher}"></h:outputText>
+                </h:column>
+               <h:column>
+                    <f:facet name="header">Vunna</f:facet>
+                    <h:outputText value="#{tabell.vinster}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Oavgjorda</f:facet>
+                    <h:outputText value="#{tabell.oavgjorda}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Förluster</f:facet>
+                    <h:outputText value="#{tabell.forluster}"></h:outputText>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Poäng</f:facet>
+                    <h:outputText value="#{tabell.poang}"></h:outputText>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
